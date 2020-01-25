@@ -14,7 +14,7 @@ export class MysqlService implements OnModuleInit, OnModuleDestroy {
     }
 
     async onModuleInit() {
-        const baseDb = this.config.MYSQL_DATABASE;
+        const baseDb = process.env.NODE_ENV === 'development' ? this.config.MYSQL_DATABASE : process.env.MYSQL_DATABASE;
         this.poolMap[baseDb] = await createPool({
             connectionLimit: 10,
             host: process.env.NODE_ENV === 'development' ? this.config.MYSQL_HOST : process.env.MYSQL_HOST,
