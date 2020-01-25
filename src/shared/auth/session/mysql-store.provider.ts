@@ -36,14 +36,15 @@ export class MysqlStoreProvider extends MySQLStore {
         // const { MYSQL_HOST, MYSQL_DATABASE, MYSQL_USER, MYSQL_PASS } = configService.config;
         let MYSQL_HOST = '';
         let MYSQL_DATABASE = '';
-        let MYSQL_USER = ''; 
+        let MYSQL_USER = '';
         let MYSQL_PASS = '';
-        if (process.env.NODE_ENV === 'development'){
+        if (process.env.NODE_ENV === 'development') {
             MYSQL_HOST = configService.config.MYSQL_HOST;
             MYSQL_DATABASE = configService.config.MYSQL_DATABASE;
             MYSQL_USER = configService.config.MYSQL_USER;
             MYSQL_PASS = configService.config.MYSQL_PASS;
         } else {
+            console.log('mysql-store not development', process.env.MYSQL_HOST, process.env.MYSQL_DATABASE, process.env.MYSQL_USER, process.env.MYSQL_PASS);
             MYSQL_HOST = process.env.MYSQL_HOST;
             MYSQL_DATABASE = process.env.MYSQL_DATABASE;
             MYSQL_USER = process.env.MYSQL_USER;

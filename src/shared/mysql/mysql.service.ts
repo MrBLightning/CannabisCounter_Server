@@ -17,18 +17,18 @@ export class MysqlService implements OnModuleInit, OnModuleDestroy {
         const baseDb = this.config.MYSQL_DATABASE;
         this.poolMap[baseDb] = await createPool({
             connectionLimit: 10,
-            host: this.config.MYSQL_HOST,
-            user: this.config.MYSQL_USER,
-            password: this.config.MYSQL_PASS,
+            host: process.env.NODE_ENV === 'development' ? this.config.MYSQL_HOST : process.env.MYSQL_HOST,
+            user: process.env.NODE_ENV === 'development' ? this.config.MYSQL_USER : process.env.MYSQL_USER,
+            password: process.env.NODE_ENV === 'development' ? this.config.MYSQL_PASS : process.env.MYSQL_PASS,
             database: baseDb,
             dateStrings: true
         });
         for (const db of APP_DATABASES) {
             this.poolMap[db] = await createPool({
                 connectionLimit: 10,
-                host: this.config.MYSQL_HOST,
-                user: this.config.MYSQL_USER,
-                password: this.config.MYSQL_PASS,
+                host: process.env.NODE_ENV === 'development' ? this.config.MYSQL_HOST : process.env.MYSQL_HOST,
+                user: process.env.NODE_ENV === 'development' ? this.config.MYSQL_USER : process.env.MYSQL_USER,
+                password: process.env.NODE_ENV === 'development' ? this.config.MYSQL_PASS : process.env.MYSQL_PASS,
                 database: db,
                 dateStrings: true
             })
