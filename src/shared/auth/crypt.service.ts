@@ -12,7 +12,9 @@ export class CryptService {
     }
 
     hashPassword(pass: string) {
-        return bcrypt.hash(pass, this.config.SECRET);
+        if (process.env.NODE_ENV === 'development')
+            return bcrypt.hash(pass, this.config.SECRET);
+        else return bcrypt.hash(pass, process.env.SECRET);
     };
     comparePassword(pass: string, hash: string) {
         return bcrypt.compare(pass, hash);

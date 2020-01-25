@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as dotenv from 'dotenv';
 import { ConfigSchema, AppConfig } from './config.schema';
-import { ConfigModule as ConfigureNest } from '@nestjs/config';
 
 @Injectable()
 export class ConfigService {
@@ -19,7 +18,7 @@ export class ConfigService {
             let dataConfig = res.parsed;
             // }
             this.config = this.validate(dataConfig);
-        } else console.log('not development',process.env);
+        } else console.log('not development', process.env.SECRET, process.env.MYSQL_DATABASE, process.env.STORAGE_FOLDER);
         // else {
         // ConfigureNest.get<string>('MYSQL_DATABASE');
         // }
