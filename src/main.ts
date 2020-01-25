@@ -8,7 +8,7 @@ import { MysqlStoreProvider } from './shared/auth/session/mysql-store.provider';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {});
   const config = app.get<ConfigService>(ConfigService).config;
-  console.log('main.ts SECRET',config.SECRET);
+  console.log('main.ts / main.js config',config);
   app.use(session({
     secret: config.SECRET,
     store: app.get<MysqlStoreProvider>(MysqlStoreProvider),
