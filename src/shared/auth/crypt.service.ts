@@ -12,9 +12,8 @@ export class CryptService {
     }
 
     hashPassword(pass: string) {
-        if (process.env.NODE_ENV === 'development')
-            return bcrypt.hash(pass, this.config.SECRET);
-        else return bcrypt.hash(pass, process.env.SECRET);
+        console.log('crypt.service SECRET', this.config.SECRET);
+        return bcrypt.hash(pass, this.config.SECRET);
     };
     comparePassword(pass: string, hash: string) {
         return bcrypt.compare(pass, hash);
