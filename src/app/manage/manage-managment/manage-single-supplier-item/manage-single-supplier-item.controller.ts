@@ -41,6 +41,14 @@ export class ManageSingleSupplierItemController {
   async getSingleSupplierItemById(@ReqUser() user: AuthUser, @Param('Id') Id: number) {
     return await this.manageSingleSupplierItemService.getSingleSupplierItemById(user.netw, Id);
   }
+  @Get("/BarCode/:BarCode")
+  @Rbac({
+    action: ACTION,
+    tasks: ["read"],
+  })
+  async getSingleSupplierItemByBarCode(@ReqUser() user: AuthUser, @Param('BarCode') BarCode: number) {
+    return await this.manageSingleSupplierItemService.getSingleSupplierItemByBarCode(user.netw, BarCode);
+  }
   @Post()
   @Rbac({
     action: ACTION,

@@ -4,6 +4,7 @@ import { OrderInternalOrderService } from '../order-internal-order/order-interna
 import { DataInternalOrderService } from '../../data/data-internal-order/data-internal-order.service';
 import { DataCatalogService } from '../../data/data-catalog/data-catalog.service';
 import { DataBranchService } from '../../data/data-branch/data-branch.service';
+import { ManageSingleSupplierItemService } from '../../manage/manage-managment/manage-single-supplier-item/manage-single-supplier-item.service';
 import { ReservedOrder, ReservedOrderData } from 'src/shared/types/system.types';
 import { AuthUser } from 'src/shared/auth/auth.types';
 import { ReqUser } from 'src/shared/auth/auth.decorator';
@@ -31,6 +32,7 @@ export class OrderDistSingleItemController {
     @Inject(OrderInternalOrderService) private readonly orderInternalOrderService: OrderInternalOrderService;
     @Inject(DataCatalogService) private readonly dataCatalogService: DataCatalogService;
     @Inject(DataBranchService) private readonly dataBranchService: DataBranchService;
+    @Inject(ManageSingleSupplierItemService) private readonly manageSingleSupplierItemService: ManageSingleSupplierItemService;
 
     //   @Inject(AppLogger) private readonly appLogger: AppLogger;
 
@@ -43,13 +45,13 @@ export class OrderDistSingleItemController {
         return await this.orderDistSingleItemService.getReservedOrders(user.netw);
     }
 
-    @Get("/:DeliveryDate")
+    @Get("/:OrderDate")
     @Rbac({
         action: ACTION,
         tasks: ["read"],
     })
-    async getReservedOrdersByDate(@ReqUser() user: AuthUser, @Param('DeliveryDate') DeliveryDate: string) {
-        return await this.orderDistSingleItemService.getReservedOrdersByDate(user.netw, DeliveryDate);
+    async getReservedOrdersByDate(@ReqUser() user: AuthUser, @Param('OrderDate') OrderDate: string) {
+        return await this.orderDistSingleItemService.getReservedOrdersByDate(user.netw, OrderDate);
     }
 
     @Get("/last")
@@ -83,35 +85,37 @@ export class OrderDistSingleItemController {
     })
     async addLatestReservedOrders(@ReqUser() user: AuthUser) {
         let lastOrder = await this.dataInternalOrderService.getLastInternalOrder(user.netw);
-        let lastSiryunOrder = await this.orderDistSingleItemService.getLastReservedOrder(user.netw);
-        let lastSiryunOrderNumber = 0;
-        if (typeof lastSiryunOrder[0] != 'undefined') lastSiryunOrderNumber = lastSiryunOrder[0].OrderNum;
-        if (lastSiryunOrderNumber < lastOrder[0].OrderNum) {
-            let newOrders = await this.orderInternalOrderService.getLatestInternalOrders(user.netw, lastSiryunOrderNumber);
+        let lastReserveOrder = await this.orderDistSingleItemService.getLastReservedOrder(user.netw);
+        let lastReserveOrderNumber = 0;
+        if (typeof lastReserveOrder[0] != 'undefined') lastReserveOrderNumber = lastReserveOrder[0].OrderNum;
+        if (lastReserveOrderNumber < lastOrder[0].OrderNum) {
+            let newOrders = await this.orderInternalOrderService.getLatestInternalOrders(user.netw, lastReserveOrderNumber);
             let length = newOrders.length;
-            // Add all new orders into table siryun_order
+            // Add all new orders into table Reserve_order
             for (let i = 0; i < length; i++) {
                 let item = await this.dataCatalogService.getCatalogItemById(user.netw, newOrders[i].BarCode);
                 let branch = await this.dataBranchService.getBranchById(user.netw, newOrders[i].BranchId);
-                // Currently add to siryun_order only items that have SapakId > 0 
-                // if (item[0].SapakId > 0) {
-                let record: ReservedOrderData = {
-                    DeliveryDate: newOrders[i].DeliveryDate,
-                    BarCode: newOrders[i].BarCode,
-                    NetworkId: branch[0].NetworkId,
-                    BranchId: branch[0].BranchId,
-                    ClassId: item[0].ClassesId,
-                    GroupId: item[0].GroupId,
-                    SupplierId: item[0].SapakId,
-                    OrderNum: newOrders[i].OrderNum,
-                    AmountOrdered: newOrders[i].AmountOrdered,
-                    AmountApproved: newOrders[i].AmountOrdered,
-                    CreatedBy: user.id,
-                    IsOrderSent: 0,
-                    RecordType: 'order'
+                let singleSupplierItem = await this.manageSingleSupplierItemService.getSingleSupplierItemByBarCode(user.netw, newOrders[i].BarCode);
+                // add internalOredr to ReservedOrder only if it exists in table single_supplier_item
+                if (typeof singleSupplierItem[0] != 'undefined') {
+                    let record: ReservedOrderData = {
+                        DeliveryDate: newOrders[i].DeliveryDate,
+                        OrderDate: newOrders[i].OrderDate,
+                        BarCode: newOrders[i].BarCode,
+                        NetworkId: branch[0].NetworkId,
+                        BranchId: branch[0].BranchId,
+                        ClassId: item[0].ClassesId,
+                        GroupId: item[0].GroupId,
+                        SupplierId: singleSupplierItem[0].SupplierId,
+                        OrderNum: newOrders[i].OrderNum,
+                        AmountOrdered: newOrders[i].AmountOrdered,
+                        AmountApproved: newOrders[i].AmountOrdered,
+                        CreatedBy: user.id,
+                        IsOrderSent: 0,
+                        RecordType: 'order'
+                    }
+                    await this.orderDistSingleItemService.addReservedOrder(user.netw, record);
                 }
-                await this.orderDistSingleItemService.addReservedOrder(user.netw, record);
-                // }
             }
         }
     }
@@ -137,7 +141,7 @@ export class OrderDistSingleItemController {
     //     action: ACTION,
     //     tasks: ["delete"],
     //   })
-    //   async deleteSiryun(@ReqUser() user: AuthUser, @Param('Id') Id: number) {
+    //   async deleteReserve(@ReqUser() user: AuthUser, @Param('Id') Id: number) {
     //     // let record: Branch = await this.manageBranchesService.getBranchById(user.netw, BranchId);
     //     // this.appLogger.log({
     //     //   record: JSON.stringify(record),
@@ -145,6 +149,6 @@ export class OrderDistSingleItemController {
     //     //   userId: user.id,
     //     //   branchId: user.branches[0]
     //     // });
-    //     return await this.orderDistParitService.deleteSiryun(user.netw, Id);
+    //     return await this.orderDistParitService.deleteReserve(user.netw, Id);
     //   }
 }

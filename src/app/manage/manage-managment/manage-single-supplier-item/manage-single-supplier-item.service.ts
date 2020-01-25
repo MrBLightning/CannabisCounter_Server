@@ -25,7 +25,17 @@ export class ManageSingleSupplierItemService {
         const results: SingleSupplierItem = await conn.query(`SELECT * FROM ${APP_TABLES.SINGLESUPPLIERITEM} WHERE Id = ${escape(Id + "")} LIMIT 1`);
 
         if (!results)
-            throw new Error("SingleSupplierItem not found or empty.");
+            throw new Error("SingleSupplierItem not found or empty - getSingleSupplierItemById.");
+        return results;
+    };
+
+    async getSingleSupplierItemByBarCode(netw: string, BarCode: number): Promise<SingleSupplierItem> {
+        const conn = await this.mysql.getConnection(netw);
+        // this query returns a single line object
+        const results: SingleSupplierItem = await conn.query(`SELECT * FROM ${APP_TABLES.SINGLESUPPLIERITEM} WHERE BarCode = ${escape(BarCode + "")} LIMIT 1`);
+
+        if (!results)
+            throw new Error("SingleSupplierItem not found or empty - getSingleSupplierItemByBarCode.");
         return results;
     };
 

@@ -16,11 +16,11 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     @Inject(AuthService) private readonly authService: AuthService;
 
     async validate(username: string, password: string): Promise<AuthUser> {
-        //console.log('local.strategy username/password going into validatePayload', username, password);
+        // console.log('local.strategy username/password going into validatePayload', username, password);
         const user = await this.authService.validateCredential(username, password);
         if (!user)
             throw new UnauthorizedException();
-        //console.log('local.strategy validation user', user);
+        // console.log('local.strategy validation user', user);
         return user;
     }
 }

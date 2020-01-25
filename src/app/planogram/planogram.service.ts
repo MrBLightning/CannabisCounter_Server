@@ -20,7 +20,7 @@ export class PlanogramService {
         if (!(branches instanceof Array))
             branches = [branches];
         const result = await conn.query(`SELECT * FROM planogram_store WHERE ${branches.map(v => `branch_id=${escape(v)}`).join(' OR ')}`);
-        
+
         return result;
     }
     async getStore(netw, storeId) {
@@ -32,7 +32,7 @@ export class PlanogramService {
         promises.push(conn.query(`SELECT * FROM planogram_shelf WHERE store_id=?`, storeId));
         promises.push(conn.query(`SELECT * FROM planogram_item WHERE store_id=?`, storeId));
         const [stores, aisles, sections, shelves, items] = await Promise.all(promises);
-        
+
         const store = stores[0];
         if (store == null) throw new Error("Unable to find store");
         const planogramMap = {
@@ -48,7 +48,7 @@ export class PlanogramService {
         return planogramMap;
     }
 
-    async backupPlanogram(netw:string, opts: any = {}) {
+    async backupPlanogram(netw: string, opts: any = {}) {
         const conn = await this.mysql.getConnection(netw);
         try {
             const {
@@ -84,12 +84,12 @@ export class PlanogramService {
         const conn = await this.mysql.getConnection(netw);
         await this.deleteStoreContent(netw, storeId);
         await conn.query(`DELETE FROM planogram_store WHERE id=?`, [storeId]);
-        
+
     };
     async renameStore(netw, storeId, newName) {
         const conn = await this.mysql.getConnection(netw);
         const result = await conn.query(`UPDATE planogram_store SET name=? WHERE id=?`, [newName, storeId]);
-        
+
         return result;
     }
     async createNewStore(netw, branchId, userId) {
@@ -144,7 +144,7 @@ export class PlanogramService {
             action: "store",
             userId: userId || 0
         });
-        
+
         return newStore
     }
 
@@ -156,7 +156,7 @@ export class PlanogramService {
         promises.push(conn.query(`SELECT * FROM planogram_shelf WHERE store_id=?`, storeId));
         promises.push(conn.query(`SELECT * FROM planogram_item WHERE store_id=?`, storeId));
         const [aisles, sections, shelves, items] = await Promise.all(promises);
-        
+
         // console.log("GET AILSE:", aisles.length, sections.length, shelves.length, items.length);
         if (aisles.length === 0)
             throw new Error("Aisle not found.");
@@ -165,7 +165,7 @@ export class PlanogramService {
     async aisleDetails(netw, aisleId) {
         const conn = await this.mysql.getConnection(netw);
         const aisles = await conn.query(`SELECT * FROM planogram_aisle WHERE id=?`, [aisleId])
-        
+
         return aisles[0];
     }
     async createAisle(netw, storeId) {
@@ -181,7 +181,7 @@ export class PlanogramService {
             },
             sections: []
         });
-        
+
         return result;
     }
     async saveAisle(netw, storeId, aisle) {
@@ -193,7 +193,7 @@ export class PlanogramService {
         });
         await this.deleteAisleContent(netw, storeId, aisle.aisle_id);
         const result = await this.handleAisle(netw, storeId, aisle);
-        
+
         return result;
     }
     async deleteAisle(netw, storeId, aisleId) {
@@ -207,7 +207,7 @@ export class PlanogramService {
         });
         await this.deleteAisleContent(netw, storeId, aisleId);
         await conn.query(`DELETE FROM planogram_aisle WHERE store_id=? AND id=?`, [storeId, aisleId]);
-        
+
     };
     async deleteAisleContent(netw, storeId, aisleId) {
         const conn = await this.mysql.getConnection(netw);
@@ -339,12 +339,13 @@ export class PlanogramService {
         const {
             faces,
             stack,
-            row
+            row,
+            manual_row_only
         } = placement;
         await conn.query(
-            `INSERT INTO planogram_item (barcode, shelf_pid, pid, store_id, \`index\`, faces, stack, row)
-            VALUES(?,?,?,?,?,?,?,?);`,
-            [product, shelfPid, pid, storeId, index, faces, stack, row])
+            `INSERT INTO planogram_item (barcode, shelf_pid, pid, store_id, \`index\`, faces, stack, row, manual_row_only)
+            VALUES(?,?,?,?,?,?,?,?,?);`,
+            [product, shelfPid, pid, storeId, index, faces, stack, row, manual_row_only])
         return {
             ...item
         }
@@ -366,12 +367,14 @@ export class PlanogramService {
         if (!placement) placement = {}
         const result = await conn.query(
             `UPDATE planogram_item 
-        SET faces=${placement.faces || 1}, stack=${placement.stack || 1}${barcode ? ", barcode=" + escape(barcode) + " " : ""}
+        SET faces=${placement.faces || 1}, stack=${placement.stack || 1} ${barcode ? ", barcode=" + escape(barcode) + " " : ""}
+        manual_row_only=${placement.manual_row_only || 0}
         WHERE store_id=${escape(storeId)} AND pid=${escape(itemId)} 
         LIMIT 1`);
-        
         return result.affectedRows == 1;
     }
+
+
     async addShelfBarcode(netw, opts) {
         const conn = await this.mysql.getConnection(netw);
         const {
@@ -391,15 +394,18 @@ export class PlanogramService {
 
         const faces = placement ? placement.faces : 1;
         const stack = placement ? placement.stack : 1;
-        const row = product && product.length && shelf && shelf.depth ? Math.floor(shelf.depth / product.length) || 1 : 1;
+        const manual_row_only = placement ? placement.manual_row_only : 0;
+        let row = placement ? placement.row : 1;
+        if (product && product.length && shelf && shelf.depth && !manual_row_only) row = Math.floor(shelf.depth / product.length);
+        if (row <= 0) row = 1;
 
         const itemPid = shelfId + PLANOGRAM_ID.ITEM + itemsLength
         await conn.query(
-            `INSERT INTO planogram_item (store_id, pid, barcode, shelf_pid, \`index\`, faces, stack, row)
-            VALUES (?,?,?,?,?,?,?,?);`,
-            [storeId, itemPid, barcode, shelfId, itemsLength, faces, stack, row]
+            `INSERT INTO planogram_item (store_id, pid, barcode, shelf_pid, \`index\`, faces, stack, row, manual_row_only)
+            VALUES (?,?,?,?,?,?,?,?,?);`,
+            [storeId, itemPid, barcode, shelfId, itemsLength, faces, stack, row, manual_row_only]
         )
-        
+
         console.log("ADDED ITEM " + barcode + " TO SHELF: " + shelfId);
     }
     async deleteShelfItem(netw, storeId, shlefItemId) {
@@ -424,7 +430,7 @@ export class PlanogramService {
             }))
             .map(item => this.handleShelfItem(netw, shelfId, item, item.index, storeId))
         );
-        
+
     }
 
 
@@ -505,6 +511,7 @@ function buildAisle(aisle, sections, shelves, items) {
                         faces: item.faces,
                         stack: item.stack,
                         row: item.row,
+                        manual_row_only: 0
                     }
                 }
                 itemCollector.push(itemMap);

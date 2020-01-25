@@ -32,6 +32,14 @@ import { ManageConversionController } from './manage-conversion/manage-conversio
 import { ManageConversionService } from './manage-conversion/manage-conversion.service';
 import { ManageDeconstructionService } from './manage-deconstruction/manage-deconstruction.service';
 import { ManageDeconstructionController } from './manage-deconstruction/manage-deconstruction.controller';
+import { ManageLocationController } from './manage-location/manage-location.controller';
+import { ManageLocationService } from './manage-location/manage-location.service';
+import { ManagePharmacyController } from './manage-pharmacy/manage-pharmacy.controller';
+import { ManagePharmacyService } from './manage-pharmacy/manage-pharmacy.service';
+import { ManageSuppliersController } from './manage-suppliers/manage-suppliers.controller';
+import { ManageSuppliersService } from './manage-suppliers/manage-suppliers.service';
+import { ManageCategoryController } from './manage-category/manage-category.controller';
+import { ManageCategoryService } from './manage-category/manage-category.service';
 
 @Module({
   imports: [RbacModule, MysqlModule ],
@@ -45,7 +53,12 @@ import { ManageDeconstructionController } from './manage-deconstruction/manage-d
     ManageMigvanSapakController, 
     ManagePerukController, 
     ManageSubbarController, 
-    ManageSubbargeneralController, ManageInventoryController, ManageDestructionController, ManageDeconstructController, ManageConversionController, ManageDeconstructionController],
+    ManageSubbargeneralController, ManageInventoryController, ManageDestructionController, 
+    ManageDeconstructController, ManageConversionController, ManageDeconstructionController,
+    ManageLocationController,
+    ManagePharmacyController,
+    ManageSuppliersController,
+    ManageCategoryController],
   providers: [
     ManageDepartmentService, 
     ManageMigvanBranchService, 
@@ -57,6 +70,11 @@ import { ManageDeconstructionController } from './manage-deconstruction/manage-d
     ManageMigvanSapakService, 
     ManagePerukService, 
     ManageSubbarService, 
-    ManageSubbargeneralService, ManageInventoryService, ManageDestructionService, ManageDeconstructService, ManageConversionService, ManageDeconstructionService]
+    ManageSubbargeneralService, ManageInventoryService, ManageDestructionService, 
+    ManageDeconstructService, ManageConversionService, ManageDeconstructionService,
+    ManageLocationService,
+    ManagePharmacyService,
+    ManageSuppliersService,
+    ManageCategoryService]
 })
 export class ManageCatalogModule {}

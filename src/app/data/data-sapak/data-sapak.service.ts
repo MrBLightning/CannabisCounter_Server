@@ -12,6 +12,7 @@ export class DataSapakService {
 
     async getSapaks(netw: string): Promise<Sapak[]> {
         const conn = await this.mysql.getConnection(netw);
+        
         const results: Sapak[] = await conn.query(`SELECT * FROM ${APP_TABLES.SUPPLIERS}`);
 
         if (!results || !results[0])

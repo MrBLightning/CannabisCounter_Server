@@ -5,12 +5,12 @@ import { ManageCatalogModule } from './manage-catalog/manage-catalog.module';
 import { ManageManagmentModule } from './manage-managment/manage-managment.module';
 import { RbacModule } from 'src/shared/rbac/rbac.module';
 import { MysqlModule } from 'src/shared/mysql/mysql.module';
-import { ManageDestructionWModule } from './manage-documents/manage-documents.module';
-import {ManageYedionModule} from './manage-yedion/manage-yedion.module'
+import { ManageDocumentsModule } from './manage-documents/manage-documents.module';
+import { ManageYedionModule } from './manage-yedion/manage-yedion.module'
 
 @Module({
-    imports: [RbacModule, MysqlModule, UserModule, ManageCatalogModule, ManageManagmentModule,ManageDestructionWModule,ManageYedionModule],
-    controllers: [ManageUserController ],
+    imports: [RbacModule, MysqlModule, UserModule, ManageCatalogModule, ManageManagmentModule, ManageDocumentsModule, ManageYedionModule],
+    controllers: [ManageUserController],
     providers: [],
 })
 export class ManageModule {

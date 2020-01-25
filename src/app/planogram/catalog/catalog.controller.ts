@@ -12,7 +12,9 @@ export class CatalogController {
     @UseGuards(AuthGuard('jwt'))
     @Get('/catalog')
     async getCatalog(@ReqUser() user: AuthUser) {
+        console.log('getCatalog');
         const catalog = await this.catalogService.getCatalog(user.netw);
+        console.log(catalog);
         return catalog;
     }
 

@@ -10,13 +10,18 @@ export class DataOrderController {
     @Inject(DataOrderService) private readonly dataOrderService: DataOrderService;
 
     @Get()
-    async getOrders(@ReqUser() user: AuthUser, ) {
+    async getOrders(@ReqUser() user: AuthUser ) {
         return await this.dataOrderService.getOrders(user.netw);
     }
 
     @Get("/last")
-    async getLastOrder(@ReqUser() user: AuthUser, ) {
+    async getLastOrder(@ReqUser() user: AuthUser ) {
         return await this.dataOrderService.getLastOrder(user.netw);
+    }
+
+    @Get("/byDate/:searchDate")
+    async getOrdersByDate(@ReqUser() user: AuthUser, @Param('searchDate') searchDate: string) {
+        return await this.dataOrderService.getOrdersByDate(user.netw, searchDate);
     }
 
     @Get("/:UserId")

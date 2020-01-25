@@ -1,4 +1,4 @@
-import { Controller, Inject, Get, Param, Post, Delete, UseGuards, Body } from '@nestjs/common';
+import { Controller, Inject, Get, Param, Post, Delete, UseGuards, Body, Put } from '@nestjs/common';
 import { OrderItemService } from './order-item.service';
 import { ReqUser } from 'src/shared/auth/auth.decorator';
 import { AuthUser } from 'src/shared/auth/auth.types';
@@ -37,6 +37,11 @@ export class OrderItemController {
     @Post()
     async addOrder(@ReqUser() user: AuthUser, @Body('record') record: Order) {
         return await this.orderItemService.addOrder(user.netw, record);
+    }
+
+    @Put("/:Id")
+    async updateOrder(@ReqUser() user: AuthUser, @Param('Id') Id: number, @Body('record') record: Order) {
+        return await this.orderItemService.updateOrder(user.netw, Id, record);
     }
 
     @Delete("/:Id")

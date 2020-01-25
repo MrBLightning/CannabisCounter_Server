@@ -3,6 +3,7 @@ import { ManageItemService } from './manage-item.service';
 import { ReqUser } from 'src/shared/auth/auth.decorator';
 import { AuthUser } from 'src/shared/auth/auth.types';
 import { CatalogItem } from 'src/shared/types/system.types';
+import { CannabisItem } from 'src/shared/types/system.types';
 import { AuthGuard } from '@nestjs/passport';
 import { Rbac } from 'src/shared/rbac/rbac.decorator';
 import { BASE_ROLE } from 'src/shared/rbac/rbac.types';
@@ -47,7 +48,7 @@ export class ManageItemController {
     action: ACTION,
     tasks: ["create"],
   })
-  async addItem(@ReqUser() user: AuthUser, @Body('record') record: CatalogItem) {
+  async addItem(@ReqUser() user: AuthUser, @Body('record') record: CannabisItem) {
     return await this.manageItemService.addItem(user.netw, record);
   }
 
@@ -56,7 +57,7 @@ export class ManageItemController {
     action: ACTION,
     tasks: ["edit"],
   })
-  async updateItem(@ReqUser() user: AuthUser, @Body('record') record: CatalogItem, @Param('BarCode') BarCode: number) {
+  async updateItem(@ReqUser() user: AuthUser, @Body('record') record: CannabisItem, @Param('BarCode') BarCode: number) {
     return await this.manageItemService.updateItem(user.netw, record);
   }
 

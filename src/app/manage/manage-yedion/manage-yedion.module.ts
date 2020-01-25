@@ -10,6 +10,10 @@ import { ManageYedtzService } from './manage-yedtz/manage-yedtz.service';
 import { ManageYedtzController } from './manage-yedtz/manage-yedtz.controller';
 import { ManageYedService } from './manage-yed/manage-yed.service';
 import { ManageYedController } from './manage-yed/manage-yed.controller';
+import { ManageYedionService } from './manage-yedion/manage-yedion.service';
+import { ManageYedionController } from './manage-yedion/manage-yedion.controller';
+import { ManageProductCampaignService } from './manage-product-campaign/manage-product-campaign.service';
+import { ManageProductCampaignController } from './manage-product-campaign/manage-product-campaign.controller';
 
 @Module({
     imports: [RbacModule, MysqlModule],
@@ -17,13 +21,17 @@ import { ManageYedController } from './manage-yed/manage-yed.controller';
         ManageSubtitleController,
         ManageYedmivController,
         ManageYedtzController,
-        ManageYedController
+        ManageYedController,
+        ManageYedionController,
+        ManageProductCampaignController
     ],
     providers: [
         ManageSubtitleService,
         ManageYedmivService,
         ManageYedtzService,
-        ManageYedService
+        ManageYedService,
+        ManageYedionService,
+        ManageProductCampaignService
     ]
 })
 export class ManageYedionModule { }

@@ -18,9 +18,9 @@ export class OrderItemService {
 
     // }
 
-    async getLatestOrders(netw: string,fromOrderNum:number): Promise<Order[]> {
+    async getLatestOrders(netw: string, fromOrderNum: number): Promise<Order[]> {
         const conn = await this.mysql.getConnection(netw);
-        const results: Order[] = await conn.query(`SELECT * FROM ${APP_TABLES.ORDERS} WHERE OrderNum > ?`,[fromOrderNum]);
+        const results: Order[] = await conn.query(`SELECT * FROM ${APP_TABLES.ORDERS} WHERE OrderNum > ?`, [fromOrderNum]);
 
         if (!results || !results[0])
             throw new Error("Orders not found or is empty.");
@@ -48,15 +48,15 @@ export class OrderItemService {
         return results;
     };
 
-    // async updateSapak(netw: string, record: Sapak): Promise<number> {
-    //     const conn = await this.mysql.getConnection(netw);
-    //     // this query returns the id of the line updated
-    //     const results: number = await conn.query(`UPDATE ${APP_TABLES.ORDERS} SET ?  WHERE Id = ?`, [record, record.Id]);
+    async updateOrder(netw: string, Id: number, record: Order): Promise<number> {
+        const conn = await this.mysql.getConnection(netw);
+        // this query returns the id of the line updated
+        const results: number = await conn.query(`UPDATE ${APP_TABLES.ORDERS} SET ?  WHERE Id = ?`, [record, Id]);
 
-    //     if (!results)
-    //         throw new Error("Orders not updated.");
-    //     return results;
-    // };
+        if (!results)
+            throw new Error("Orders not updated.");
+        return results;
+    };
 
     async deleteOrder(netw: string, Id: number): Promise<number> {
         const conn = await this.mysql.getConnection(netw);

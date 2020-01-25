@@ -17,6 +17,7 @@ import { SessionAuthGuard } from './session/session-auth.guard';
 import { SessionGuard } from './session/session.guard';
 import { MysqlStoreProvider } from './session/mysql-store.provider';
 import { CookieSerializer } from './session/cookie-serializer';
+import { DataRbacService } from '../../app/data/data-rbac/data-rbac.service';
 
 // for testing
 // const TOKEN_EXPIRE_IN = '1h';
@@ -40,7 +41,8 @@ const TOKEN_EXPIRE_IN = '1d';
       })
     }),
   ],
-  providers: [AuthService, CryptService, LocalStrategy, JwtStrategy, AppJwtService, SessionAuthGuard, SessionGuard, MysqlStoreProvider, CookieSerializer],
+  providers: [AuthService, CryptService, LocalStrategy, JwtStrategy, AppJwtService,
+    SessionAuthGuard, SessionGuard, MysqlStoreProvider, CookieSerializer, DataRbacService],
   exports: [AuthService],
 })
 export class AuthModule { }

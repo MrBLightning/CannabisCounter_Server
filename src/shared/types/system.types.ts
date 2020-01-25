@@ -3,6 +3,11 @@ export type Department = {
   Name: string
 }
 
+export type Location = {
+  Id: number,
+  Name: string
+}
+
 export type Group = {
   Id: number,
   Name: string,
@@ -41,6 +46,49 @@ export type Subsapak = {
 export type SingleSupplierItem = {
   BarCode:number,
   SupplierId:number
+}
+
+export type CannabisItem = {
+  Id: number,
+  BarCode: number,
+  Name: string,
+  THC: number,
+  CBD: number
+}
+
+export type Pharmacy = {
+  Id: number,
+  LocationId: number,
+  Name: string,
+  Address: string,
+  Phone: string
+}
+
+export type PharmacyAdd = {
+  LocationId: number,
+  Name: string,
+  Address: string,
+  Phone: string
+}
+
+export type Supplier = {
+  Id: number,
+  Name: string,
+}
+
+export type Category = {
+  Id: number,
+  Name: string,
+}
+
+export type Stock = {
+  Id: number,
+  PharmacyId: number, 
+  LocationId: number, 
+  CategoryId: number, 
+  SupplierId: number, 
+  InStock: number, 
+  ByUser: number
 }
 
 export type CatalogItem = { // catalog table
@@ -208,6 +256,7 @@ export type SiryunUpdate = {
 export type ReservedOrder = {
   Id: number,
   DeliveryDate: Date,
+  OrderDate: Date,
   BarCode: number,
   NetworkId:number,
   BranchId: number,
@@ -224,6 +273,7 @@ export type ReservedOrder = {
 
 export type ReservedOrderData = {
   DeliveryDate: Date,
+  OrderDate: Date,
   BarCode: number,
   NetworkId:number,
   BranchId: number,
@@ -365,6 +415,7 @@ export type BranchNetwork = {
 
 export type Yedm={
   Name:string,
+  snif_katan:string
 }
 
 export type Yedmivs={
@@ -393,7 +444,7 @@ export type YedionType = {
   kyedtz: number,
   rem: string,
   barcode: string,
-  degem: number,
+  degem: string,
   sapakid: number,
   miv_name: string,
   kamut: number,
@@ -401,5 +452,25 @@ export type YedionType = {
   kamutbuy: number,
   kamutsale: number,
   barcodePrice: number,
-  kamutmat: number
+  kamutmat: number,
+  gondola:number
+
 }
+
+export type CampaignType={
+  id:number,
+  begin_at: Date | null,
+  end_at: Date | null,
+  barcode:number,
+  singular_price:number,
+  price:number,
+  campaign_type:number
+  }
+
+  export type SubSupplier={
+    Id:number,
+    SubsapakId:number,
+    SubsapakName:string,
+    SapakId:number,
+    ClassesId:number
+  }

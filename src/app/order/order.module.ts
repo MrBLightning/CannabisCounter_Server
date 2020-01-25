@@ -18,11 +18,12 @@ import { DataSupSiryunService } from '../data/data-sup-siryun/data-sup-siryun.se
 import { OrderInternalOrderService } from './order-internal-order/order-internal-order.service';
 import { OrderInternalOrderController } from './order-internal-order/order-internal-order.controller';
 import { DataInternalOrderService } from '../data/data-internal-order/data-internal-order.service';
-
+import { ManageSingleSupplierItemService  } from '../manage/manage-managment/manage-single-supplier-item/manage-single-supplier-item.service';
 @Module({
   imports: [RbacModule, MysqlModule],
   controllers: [OrderItemController, OrderReserveFishController, OrderReserveChickenController, OrderDistSingleItemController, OrderInternalOrderController],
   providers: [AppLogger, OrderItemService, OrderReserveFishService, OrderReserveChickenService, OrderDistSingleItemService, DataOrderService,
-    DataCatalogService, DataBranchService, DataGroupService, DataSupSiryunService, OrderInternalOrderService, DataInternalOrderService]
+    DataCatalogService, DataBranchService, DataGroupService, DataSupSiryunService, OrderInternalOrderService, DataInternalOrderService,
+    ManageSingleSupplierItemService]
 })
 export class OrderModule { }

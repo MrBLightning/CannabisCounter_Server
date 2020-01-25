@@ -1,13 +1,17 @@
 
-export const APP_DATABASES = ['nyocha', 'super', 'mahyan', 'Bonus', 'ngorme'];
+export const APP_DATABASES = ['heroku_3df2b831d9cd2a4'];
 // export const APP_DATABASES = [];
 export const APP_TABLES = {
     USERS: "auth_users",
     SESSION: "auth_session",
+    LOCATION: "location",
+    PHARMACY: "pharmacy",
+    STOCK: "pharmacy_stock",
     DEPARTMENTS: "classes",
     GROUPS: "groups",
     SUBGROUPS: "sub_group",
-    SUPPLIERS: "sapakim",
+    SUPPLIERS: "suppliers",
+    CATEGORY: "category",
     SUBSAPAKS: "subsapak",
     SERIES: "degems",
     CATALOG: "catalog",
@@ -42,6 +46,8 @@ export const APP_TABLES = {
     YEDMIV:"yedmiv",
     YEDTZ:"yedtz",
     YED:"yed",
-    YEDION:"yedion"
+    YEDION:"yedion",
+    PRODUCT_CAMPAIGN:"product_campaign",
+
 }
-export const DEFUALT_DATABASE = 'nyocha';
+export const DEFUALT_DATABASE = 'heroku_3df2b831d9cd2a4';

@@ -11,4 +11,5 @@ export type User = {
     updated_at: string;
     created_at: string;
     branches?: number[];
+    app_only:number;
 }

@@ -25,6 +25,15 @@ export class DataOrderService {
         return results;
     }
 
+    async getOrdersByDate(netw: string, searchDate: string): Promise<Order[]> {
+        const conn = await this.mysql.getConnection(netw);
+        const results: Order[] = await conn.query(`SELECT * FROM ${APP_TABLES.ORDERS} WHERE OrderDate=?`, [searchDate]);
+
+        if (!results)
+            throw new Error("Orders not found or empty.");
+        return results;
+    }
+
     async getOrdersByUSer(netw: string, UserId: number): Promise<Order[]> {
         const conn = await this.mysql.getConnection(netw);
         const results: Order[] = await conn.query(`SELECT * FROM ${APP_TABLES.ORDERS} WHERE CreatedBy = ${UserId + ''}`);

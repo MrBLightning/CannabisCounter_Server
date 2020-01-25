@@ -15,7 +15,6 @@ export class DataSubtitleService {
 
         const conn = await this.mysql.getConnection(netw);
         const results: Yedm[] = await conn.query(`SELECT * FROM ${APP_TABLES.YEDM}`);
-        console.log("getYedmItems2",results)
 
         if (!results || !results[0])
             throw new Error("Branch types not found or empty.");

@@ -26,10 +26,12 @@ import { ManageSiryunService } from './manage-siryun/manage-siryun.service';
 import { ManageSiryunController } from './manage-siryun/manage-siryun.controller';
 import { ManageSingleSupplierItemController } from './manage-single-supplier-item/manage-single-supplier-item.controller';
 import { ManageSingleSupplierItemService } from './manage-single-supplier-item/manage-single-supplier-item.service';
+import { ManageSubSuppliersController } from './manage-subsuppliers/manage-subsuppliers.controller';
+import { ManageSubSuppliersService } from './manage-subsuppliers/manage-subsuppliers.service';
 
 @Module({
   imports: [RbacModule, MysqlModule ],
-  controllers: [ManageSapakimController, ManageSubsapakController, ManageBranchesController, ManageAspakaController, ManageSupsiryunController, ManageDordersController, ManageSibasController, ManageCodeConversionController, ManageBranchNetworkController, ManageUnitSizeController, ManageSiryunController, ManageSingleSupplierItemController],
-  providers: [AppLogger, ManageSapakimService, ManageSubsapakService, ManageBranchesService, ManageAspakaService, ManageSupsiryunService, ManageDordersService, ManageSibasService, ManageCodeConversionService, ManageBranchNetworkService, ManageUnitSizeService, ManageSiryunService, ManageSingleSupplierItemService]
+  controllers: [ManageSapakimController, ManageSubsapakController, ManageBranchesController, ManageAspakaController, ManageSupsiryunController, ManageDordersController, ManageSibasController, ManageCodeConversionController, ManageBranchNetworkController, ManageUnitSizeController, ManageSiryunController, ManageSingleSupplierItemController, ManageSubSuppliersController],
+  providers: [AppLogger, ManageSapakimService, ManageSubsapakService, ManageBranchesService, ManageAspakaService, ManageSupsiryunService, ManageDordersService, ManageSibasService, ManageCodeConversionService, ManageBranchNetworkService, ManageUnitSizeService, ManageSiryunService, ManageSingleSupplierItemService, ManageSubSuppliersService]
 })
 export class ManageManagmentModule {}

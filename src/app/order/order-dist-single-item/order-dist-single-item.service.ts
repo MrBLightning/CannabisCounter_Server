@@ -20,9 +20,9 @@ export class OrderDistSingleItemService {
         return results;
     }
 
-    async getReservedOrdersByDate(netw: string, DeliveryDate: string): Promise<ReservedOrder[]> {
+    async getReservedOrdersByDate(netw: string, OrderDate: string): Promise<ReservedOrder[]> {
         const conn = await this.mysql.getConnection(netw);
-        const results: ReservedOrder[] = await conn.query(`SELECT * FROM ${APP_TABLES.RESERVEDORDER} WHERE DeliveryDate=?`, [DeliveryDate]);
+        const results: ReservedOrder[] = await conn.query(`SELECT * FROM ${APP_TABLES.RESERVEDORDER} WHERE OrderDate=?`, [OrderDate]);
 
         if (!results || !results[0])
             throw new Error("ReservedOrders not found or empty - getReservedOrdersByDate.");

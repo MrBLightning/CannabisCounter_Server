@@ -1,3 +1,4 @@
+import { RbacPermission } from "../rbac/rbac.types"
 
 
 export type AuthPayload = {
@@ -12,6 +13,8 @@ export type AuthUser = {
     name: string;
     netw: string;
     role: string;
+    permissions: RbacPermission[];
     branches: number[];
     email?: string;
+    appOnly: number;
 }

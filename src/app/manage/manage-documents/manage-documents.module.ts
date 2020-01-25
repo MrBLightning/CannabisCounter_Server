@@ -14,4 +14,4 @@ import { ManageDestructionWController } from './manage-destructionW/manage-destr
         ManageDestructionWService,
     ]
 })
-export class ManageDestructionWModule { }
+export class ManageDocumentsModule { }

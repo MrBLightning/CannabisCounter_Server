@@ -6,6 +6,8 @@ import { CryptService } from './crypt.service';
 import { AppJwtService } from './jwt.service';
 import { MysqlStoreProvider } from './session/mysql-store.provider';
 import Bluebird = require('bluebird');
+import { DataRbacService } from '../../app/data/data-rbac/data-rbac.service';
+import { RbacPermission } from '../rbac/rbac.types';
 
 type LoginResponseDto = {
     user: AuthUser,
@@ -18,24 +20,28 @@ export class AuthService {
     @Inject(UserService) private readonly userService: UserService;
     @Inject(AppJwtService) private readonly jwtService: AppJwtService;
     @Inject(CryptService) private readonly cryptService: CryptService;
+    @Inject(DataRbacService) private readonly dataRbacService: DataRbacService;
+
     getSession: (sessionId: string) => Bluebird<any>;
     constructor(@Inject(MysqlStoreProvider) store: MysqlStoreProvider) {
         this.getSession = Bluebird.promisify<any, string>((sessionId, cb) => store.get(sessionId, cb));
     }
 
     async validatePayload(payload: AuthPayload): Promise<AuthUser> {
-        console.log('auth.service payload going into validatePayload', payload);
+        // console.log('auth.service payload going into validatePayload', payload);
         let session: any;
         try {
             session = await this.getSession(payload.session_id);
         } catch (error) {
             // console.error(error);
         }
-        if (!session || !session.passport || !session.passport.user) 
+        if (!session || !session.passport || !session.passport.user)
             throw new UnauthorizedException("Invalid Token.");
-        
+
         // const user: User = await this.userService.userById(payload.id, payload.phone);
-        return marshalAuthUser(session.passport.user);
+        let permissions = null;
+        if (session.passport.user.role != 'super_admin') permissions = await this.dataRbacService.getPermissions(session.passport.user.role, session.passport.user.netw);
+        return marshalAuthUser(session.passport.user, permissions);
     }
     async validateCredential(username: string, password: string): Promise<AuthUser> {
         const user: User = await this.userService.userByCredential(username);
@@ -44,8 +50,10 @@ export class AuthService {
         //     throw new UnauthorizedException("Invalid Credentials");
         if (password !== user.password)
             throw new UnauthorizedException("Invalid Credentials");
-        let result = marshalAuthUser(user);
-        console.log('validateCredential result',result);
+        let permissions = null;
+        if (user.role != 'super_admin') permissions = await this.dataRbacService.getPermissions(user.role, user.netw);
+        let result = marshalAuthUser(user, permissions);
+        //console.log('validateCredential result',result);
         //return marshalAuthUser(user);
         return result;
     }
@@ -59,7 +67,7 @@ export class AuthService {
      */
     async login(session_id: string, user: AuthUser): Promise<LoginResponseDto> {
         let exp = Date.now() + 86400000;
-        console.log('auth.service returning response: user',user,'exp_date',new Date(exp));
+        // console.log('auth.service returning response: user', user, 'exp_date', new Date(exp));
         return {
             user,
             access_token: this.jwtService.createToken({
@@ -73,14 +81,17 @@ export class AuthService {
 }
 
 
-export function marshalAuthUser(user: User): AuthUser {
+export function marshalAuthUser(user: User, permissions: RbacPermission[]): AuthUser {
+    // console.log('marshalAuthUser user', user, permissions);
     return {
         id: user.id,
         phone: user.phone,
         role: user.role,
+        permissions: permissions,
         netw: user.netw,
         name: user.name,
         email: user.email,
-        branches: user.branch ? handleSnifArray(user.branch) : []
+        branches: user.branch ? handleSnifArray(user.branch) : [],
+        appOnly: user.app_only
     }
 }

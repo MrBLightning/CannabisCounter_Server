@@ -141,6 +141,7 @@ export class PlanogramController {
     }
     @Put('/store/:store_id/item/:shelf_item_id')
     async updateShelfBarcode(@ReqUser() user: AuthUser, @Body("placement") placement, @Body("barcode") barcode, @Param('store_id') store_id, @Param('shelf_item_id') shelf_item_id) {
+        console.log('updateShelfBarcode',store_id, shelf_item_id, placement, barcode);
         if (!store_id || !shelf_item_id)
             return new BadRequestException();
         const placementObjectError = PlacementObject.validate(placement).error;
