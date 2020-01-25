@@ -16,7 +16,7 @@ export class RbacService implements OnApplicationBootstrap {
     private readonly baseDb: string;
 
     constructor(@Inject(ConfigService) configService: ConfigService) {
-        this.baseDb = process.env.NODE_ENV === 'development' ? configService.config.MYSQL_DATABASE : process.env.MYSQL_DATABASE
+        this.baseDb = configService.config.MYSQL_DATABASE;
     }
 
     async onApplicationBootstrap() {

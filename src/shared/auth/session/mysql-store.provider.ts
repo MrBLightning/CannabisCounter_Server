@@ -33,12 +33,7 @@ export class MysqlStoreProvider extends MySQLStore {
     //     this.connection = await this.mysql.getConnection()
     // }
     constructor(@Inject(ConfigService) configService: ConfigService) {
-        // const { MYSQL_HOST, MYSQL_DATABASE, MYSQL_USER, MYSQL_PASS } = configService.config;
-        let MYSQL_HOST = process.env.NODE_ENV === 'development' ? configService.config.MYSQL_HOST : process.env.MYSQL_HOST;
-        let MYSQL_DATABASE = process.env.NODE_ENV === 'development' ? configService.config.MYSQL_DATABASE : process.env.MYSQL_DATABASE;
-        let MYSQL_USER = process.env.NODE_ENV === 'development' ? configService.config.MYSQL_USER : process.env.MYSQL_USER;
-        let MYSQL_PASS = process.env.NODE_ENV === 'development' ? configService.config.MYSQL_PASS : process.env.MYSQL_PASS;
-
+        const { MYSQL_HOST, MYSQL_DATABASE, MYSQL_USER, MYSQL_PASS } = configService.config;
         super({
             host: MYSQL_HOST,
             port: 3306,
