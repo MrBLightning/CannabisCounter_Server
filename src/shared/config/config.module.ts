@@ -3,7 +3,7 @@ import { ConfigService } from './config.service';
 
 @Module({
   providers: [
-    ConfigService
+    ConfigService,
     // {
     //   provide: ConfigService,
     //   useValue: new ConfigService(process.env.NODE_ENV && `${process.env.NODE_ENV}.env`),
