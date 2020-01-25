@@ -17,11 +17,17 @@ import { StorageModule } from 'src/shared/storage/storage.module';
 import { OrderModule } from './order/order.module';
 import { TransferItemController } from './transfer/transfer-item/transfer-item.controller';
 import { TransferItemService } from './transfer/transfer-item/transfer-item.service';
+import { ConfigModule as ConfigureNest} from '@nestjs/config';
+
 
 @Module({
   imports: [
     LoggerModule,
     ConfigModule,
+    // set nest to ignore .env files
+    ConfigureNest.forRoot({
+      ignoreEnvFile: true,
+    }),
     MysqlModule,
     UserModule,
     AuthModule,
