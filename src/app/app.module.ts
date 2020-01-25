@@ -27,6 +27,7 @@ import { ConfigModule as ConfigureNest} from '@nestjs/config';
     // set nest to ignore .env files
     ConfigureNest.forRoot({
       ignoreEnvFile: true,
+      isGlobal: true,
     }),
     MysqlModule,
     UserModule,

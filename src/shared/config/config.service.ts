@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as dotenv from 'dotenv';
 import { ConfigSchema, AppConfig } from './config.schema';
+import { ConfigModule as ConfigureNest} from '@nestjs/config';
 
 @Injectable()
 export class ConfigService {
@@ -11,12 +12,17 @@ export class ConfigService {
         // if (filePath)
         //     dataConfig = dotenv.parse(fs.readFileSync(filePath))
         // else {
-        const res = dotenv.config();
-        if (res.error)
-            throw new Error("Unable to find .env " + res.error.toString());
-        let dataConfig = res.parsed;
+        if (process.env.NODE_ENV === 'development') {
+            const res = dotenv.config();
+            if (res.error)
+                throw new Error("Unable to find .env " + res.error.toString());
+            let dataConfig = res.parsed;
+            // }
+            this.config = this.validate(dataConfig);
+        } 
+        // else {
+        // ConfigureNest.get<string>('MYSQL_DATABASE');
         // }
-        this.config = this.validate(dataConfig);
     }
 
     private validate(data: any): AppConfig {
