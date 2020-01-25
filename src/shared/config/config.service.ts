@@ -42,27 +42,12 @@ export class ConfigService {
 
 
     get secret(): string {
-        if (process.env.NODE_ENV === 'development')
-            return this.config.SECRET;
-        else {
-            // console.log('called config.service secret',process.env.SECRET);
-            return process.env.SECRET;
-        }
+        return this.config.SECRET;
     }
     get baseDatabase(): string {
-        if (process.env.NODE_ENV === 'development')
-            return this.config.MYSQL_DATABASE;
-        else {
-            // console.log('called config.service baseDatabase',process.env.MYSQL_DATABASE);
-            return process.env.MYSQL_DATABASE;
-        }
+        return this.config.MYSQL_DATABASE;
     }
     get storage(): string {
-        if (process.env.NODE_ENV === 'development')
-            return this.config.STORAGE_FOLDER;
-        else {
-            // console.log('called config.service storage',process.env.STORAGE_FOLDER);
-            return process.env.STORAGE_FOLDER;
-        }
+        return this.config.STORAGE_FOLDER;
     }
 }
