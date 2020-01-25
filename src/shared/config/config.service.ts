@@ -14,7 +14,8 @@ export class ConfigService {
         // else {
         const res = dotenv.config();
         if (res.error)
-            throw new Error("Unable to find .env " + res.error.toString());
+            // throw new Error("Unable to find .env " + res.error.toString());
+            throw new Error("new error " + res.error.toString());
         let dataConfig = res.parsed;
         // }
         this.config = this.validate(dataConfig);
