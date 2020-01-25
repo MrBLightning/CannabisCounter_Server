@@ -1,0 +1,24 @@
+{
+    "name": "WeedSupply API",
+    "version": "v1.0",
+    "description": "This app does one little thing",
+    "success_url": "/",
+    "scripts": {
+       "postdeploy": "database create && database update"
+      },
+   "env": {
+     "production": "true",
+     "verboseApiCalls": "false",
+     "PORT":"5000",
+     "APP_NAME":"WeedSupply API",
+     "HOST":"localhost",
+     "SECRET":"SECRET",
+
+     "MYSQL_HOST":"us-cdbr-iron-east-05.cleardb.net",
+     "MYSQL_USER":"b48e5e2357b795",
+     "MYSQL_PASS":"cd52f8b9",
+     "MYSQL_DATABASE":"heroku_3df2b831d9cd2a4",
+
+     "STORAGE_FOLDER":"C:/temp"
+   }
+}
