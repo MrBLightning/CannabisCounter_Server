@@ -19,17 +19,32 @@ export class ConfigService {
             // }
             this.config = this.validate(dataConfig);
         } else {
-            this.config = {
-                SECRET: process.env.SECRET,
-                MYSQL_DATABASE: process.env.MYSQL_DATABASE,
-                STORAGE_FOLDER: process.env.STORAGE_FOLDER,
-                MYSQL_HOST: process.env.MYSQL_HOST,
-                MYSQL_USER: process.env.MYSQL_USER,
-                MYSQL_PASS: process.env.MYSQL_PASS,
-                APP_NAME: process.env.APP_NAME,
-                APP_VERSION: process.env.APP_VERSION,
-                PORT: parseInt(process.env.PORT),
-                HOST: process.env.HOST,
+            if (process.env) {
+                this.config = {
+                    SECRET: process.env.SECRET,
+                    MYSQL_DATABASE: process.env.MYSQL_DATABASE,
+                    STORAGE_FOLDER: process.env.STORAGE_FOLDER,
+                    MYSQL_HOST: process.env.MYSQL_HOST,
+                    MYSQL_USER: process.env.MYSQL_USER,
+                    MYSQL_PASS: process.env.MYSQL_PASS,
+                    APP_NAME: process.env.APP_NAME,
+                    APP_VERSION: process.env.APP_VERSION,
+                    PORT: parseInt(process.env.PORT),
+                    HOST: process.env.HOST,
+                }
+            } else {
+                this.config = {
+                    SECRET: '',
+                    MYSQL_DATABASE: '',
+                    STORAGE_FOLDER: '',
+                    MYSQL_HOST: '',
+                    MYSQL_USER: '',
+                    MYSQL_PASS: '',
+                    APP_NAME: '',
+                    APP_VERSION: '',
+                    PORT: 3000,
+                    HOST: '',
+                }
             }
         }
     }
