@@ -36,7 +36,8 @@ const TOKEN_EXPIRE_IN = '1d';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        secret: configService ? configService.secret : process.env.SECRET,
+        //secret: configService ? configService.secret : process.env.SECRET,
+        secret: 'SECRET',
         signOptions: { expiresIn: TOKEN_EXPIRE_IN },
       })
     }),
