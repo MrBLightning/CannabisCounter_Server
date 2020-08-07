@@ -30,7 +30,7 @@
     "@nestjs/passport": "^6.1.1",
     "@nestjs/platform-express": "^6.7.2",
     "bcryptjs": "^2.4.3",
-    "class-transformer": "^0.2.3",
+    "class-transformer": "^0.3.1",
     "compression": "^1.7.4",
     "dotenv": "^8.2.0",
     "express-mysql-session": "^2.1.0",
